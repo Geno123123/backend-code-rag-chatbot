@@ -1,0 +1,14 @@
+[
+  {
+    "file_name": "UserController.java",
+    "text": "package com.example.user;\n\npublic class UserController {\n    private final UserService userService;\n\n    public UserController(UserService userService) {\n        this.userService = userService;\n    }\n\n    public UserResponse getUser(Long userId) {\n        return userService.findUserById(userId);\n    }\n}"
+  },
+  {
+    "file_name": "UserService.java",
+    "text": "package com.example.user;\n\npublic class UserService {\n    private final UserRepository userRepository;\n\n    public UserResponse findUserById(Long userId) {\n        User user = userRepository.findById(userId)\n            .orElseThrow(() -> new IllegalArgumentException(\"User not found\"));\n        return UserResponse.from(user);\n    }\n}"
+  },
+  {
+    "file_name": "OrderService.java",
+    "text": "package com.example.order;\n\npublic class OrderService {\n    public OrderResult createOrder(Long userId, List<OrderItem> items) {\n        validateItems(items);\n        int totalPrice = calculateTotalPrice(items);\n        return new OrderResult(userId, totalPrice);\n    }\n\n    private void validateItems(List<OrderItem> items) {\n        if (items == null || items.isEmpty()) {\n            throw new IllegalArgumentException(\"Order items are required\");\n        }\n    }\n\n    private int calculateTotalPrice(List<OrderItem> items) {\n        return items.stream()\n            .mapToInt(item -> item.getPrice() * item.getQuantity())\n            .sum();\n    }\n}"
+  }
+]
